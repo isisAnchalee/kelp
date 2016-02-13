@@ -74,10 +74,40 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     internal func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
-        cell.switchLabel.text = categories[indexPath.row]["name"]
-        cell.delegate = self
-        cell.onSwitch.on = switchStates[indexPath.row] ?? false
+        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+        let filter = self.myFilters!.filters[indexPath.section] as Filter
+        let option = filter.options[indexPath.row]
+        cell.textLabel!.text = option.optionName
+        if filter.name == "Deal" || filter.name == "Category"
+        {
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            let switchView = UISwitch(frame: CGRectZero)
+            switchView.on = option.selected
+            switchView.onTintColor = UIColor(red: 73.0/255.0, green: 134.0/255.0, blue: 231.0/255.0, alpha: 1.0)
+            switchView.addTarget(self, action: "handleSwitchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+            cell.accessoryView = switchView
+        } else if filter.name == "Distance" || filter.name == "Sort By" {
+            if filter.isExpanded {
+                let option = filter.options[indexPath.row]
+                cell.textLabel!.text = option.optionName
+                if option.selected {
+                    cell.accessoryView = UIImageView(image: UIImage(named: "Check"))
+                } else {
+                    cell.accessoryView = UIImageView(image: UIImage(named: "Uncheck"))
+                }
+            } else {
+                var selectedIndex: Int = 0
+                if filter.name == "Distance" {
+                    selectedIndex = (myFilters?.selectedDistanceIndex)!
+                } else if filter.name == "Sort By" {
+                    selectedIndex = (myFilters?.selectedSortIndex)!
+                }
+                cell.textLabel!.text = filter.options[selectedIndex].optionName
+                cell.accessoryView = UIImageView(image: UIImage(named: "Uncheck"))
+            }
+            
+        }
+        
         return cell
     }
     
@@ -92,10 +122,62 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     
-    func tableView(_ tableView: UITableView,
+    func tableView(tableView: UITableView,
         titleForHeaderInSection section: Int) -> String? {
             return self.myFilters?.filters[section].name
     }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        print("in didSelectRowAtIndexPath")
+        let filter = self.myFilters!.filters[indexPath.section] as Filter
+        
+        print("Filter name -- \(filter.name)")
+        if filter.name == "Distance" || filter.name == "Sort By" && !filter.isExpanded {
+            filter.isExpanded = true
+            // Sending the results back to main queue to update UI using the fetched data
+            dispatch_async(dispatch_get_main_queue()) {
+                self.tableView.reloadSections(NSMutableIndexSet(index: indexPath.section), withRowAnimation: .Automatic)
+            }
+            
+        }
+        
+        
+        if filter.isExpanded {
+            if filter.name == "Distance" {
+                let oldSelectedDistance = myFilters?.selectedDistanceIndex
+                if oldSelectedDistance != indexPath.row {
+                    let oldIndex = NSIndexPath(forRow: oldSelectedDistance!, inSection: indexPath.section)
+                    myFilters?.selectedDistanceIndex = indexPath.row
+                    let option = filter.options[indexPath.row]
+                    option.selected = true
+                    self.tableView.reloadRowsAtIndexPaths([indexPath, oldIndex], withRowAnimation: .Automatic)
+                    
+                }
+            } else if filter.name == "Sort By" {
+                let oldSelectedSort = myFilters?.selectedSortIndex
+                if oldSelectedSort != indexPath.row {
+                    let oldIndex = NSIndexPath(forRow: oldSelectedSort!, inSection: indexPath.section)
+                    myFilters?.selectedSortIndex = indexPath.row
+                    self.tableView.reloadRowsAtIndexPaths([indexPath, oldIndex], withRowAnimation: .Automatic)
+                    
+                }
+            }
+            //filter.isExpanded = false
+        }
+        
+    }
+    
+    func handleSwitchValueChanged(switchView: UISwitch) -> Void {
+        
+        let cell = switchView.superview as! UITableViewCell
+        if let indexPath = self.tableView.indexPathForCell(cell) {
+            let filter = self.myFilters!.filters[indexPath.section] as Filter
+            let option = filter.options[indexPath.row]
+            option.selected = switchView.on
+        }
+        
+    }
+    
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
