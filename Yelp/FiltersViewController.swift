@@ -17,7 +17,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     weak var delegate: FiltersViewControllerDelegate?
     var categories: [[String:String]] = []
     var switchStates: [Int:Bool] = [Int:Bool]()
-
+    var myFilters:Filters?
+    
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func onSearchBtn(sender: AnyObject) {
@@ -46,10 +47,11 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+    
+        //Instantiate the filters object to load filters
+        self.myFilters = Filters(instance: Filters.instance)
         
-        categories = yelpCategories
-        
-        
+        self.categories = YelpCategories.categories
         // Do any additional setup after loading the view.
     }
 
@@ -59,7 +61,16 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     internal func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        return categories.count
+        print("in numberOfRowsInSection")
+        let filter = self.myFilters!.filters[section] as Filter
+        if filter.isExpanded {
+            print("Returning all opts - \(filter.options.count)")
+            //filter.isExpanded = false
+            return filter.options.count
+        } else {
+            return filter.numOptsDisplayed!
+        }
+        
     }
     
     internal func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
@@ -76,14 +87,18 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         print("filters view controller event!!")
     }
     
-    /*
-    // MARK: - Navigation
-
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return self.myFilters!.filters.count
+    }
+    
+    
+    func tableView(_ tableView: UITableView,
+        titleForHeaderInSection section: Int) -> String? {
+            return self.myFilters?.filters[section].name
+    }
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
-    */
-
 }
