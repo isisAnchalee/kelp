@@ -10,6 +10,7 @@ import UIKit
 
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate, UISearchBarDelegate{
 
+    @IBOutlet weak var searchBar: UISearchBar!
     var businesses: [Business] = []
     var filteredBusinesses: [Business]!
 
@@ -17,11 +18,10 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        filteredBusinesses = businesses
 
-        let searchBar = UISearchBar()
         searchBar.sizeToFit()
         searchBar.delegate = self
-        filteredBusinesses = businesses
         navigationItem.titleView = searchBar
 
         definesPresentationContext = true
@@ -74,20 +74,28 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         // Dispose of any resources that can be recreated.
     }
     
-    func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
-        
-        var categories = filters["categories"] as? [String]
-        Business.searchWithTerm("restaurants", sort: nil, categories: categories, deals: nil) { (businesses: [Business]!, error: NSError!) -> Void in
-            self.businesses = businesses
-            self.filteredBusinesses = businesses
-            self.tableView.reloadData()
+    
+    func didUpdateFilters(controller: FiltersViewController) {
+        if self.searchBar.text != "" {
+            print("didUpdateFilters called")
+            print("Distance is \(Filters.instance.distance)")
+            print("Deal is \(Filters.instance.deal)")
+            
+            Business.searchWithTerm("Restaurants", sort: .Distance, categories: Filters.instance.categories, deals: Filters.instance.deal) { (businesses: [Business]!, error: NSError!) -> Void in
+                self.businesses = businesses
+                
+                for business in businesses {
+                    print(business.name!)
+                    print(business.address!)
+                }
+            }
         }
+        
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let navigationController = segue.destinationViewController as! UINavigationController
         let filtersViewController = navigationController.topViewController as! FiltersViewController
         filtersViewController.delegate = self
     }
-
 
 }

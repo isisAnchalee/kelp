@@ -9,34 +9,25 @@
 import UIKit
 
 @objc protocol FiltersViewControllerDelegate{
-    optional func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String:AnyObject])
+    optional func didUpdateFilters(controller: FiltersViewController)
 }
 
-class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
+class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     weak var delegate: FiltersViewControllerDelegate?
     var categories: [[String:String]] = []
     var switchStates: [Int:Bool] = [Int:Bool]()
     var myFilters:Filters?
+    var expanded = false
     
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func onSearchBtn(sender: AnyObject) {
+        Filters.instance.copyFrom(self.myFilters!)
+        self.delegate?.didUpdateFilters!(self)
+        
         dismissViewControllerAnimated(true, completion: nil)
-        var filters = [String: AnyObject]()
         
-        var selectedCategories = [String]()
-        
-        for (row, isSelected) in switchStates{
-            if isSelected{
-                selectedCategories.append(categories[row]["code"]!)
-            }
-        }
-        if selectedCategories.count > 0 {
-            filters["categories"] = selectedCategories
-        }
-        
-        delegate?.filtersViewController!(self, didUpdateFilters: filters)
     }
     
     @IBAction func onCancelBtn(sender: AnyObject) {
@@ -50,9 +41,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
         //Instantiate the filters object to load filters
         self.myFilters = Filters(instance: Filters.instance)
-        
-        self.categories = YelpCategories.categories
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -78,14 +66,15 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         let filter = self.myFilters!.filters[indexPath.section] as Filter
         let option = filter.options[indexPath.row]
         cell.textLabel!.text = option.optionName
-        if filter.name == "Deal" || filter.name == "Category"
-        {
+        
+        if filter.name == "Deal" || filter.name == "Category" {
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             let switchView = UISwitch(frame: CGRectZero)
             switchView.on = option.selected
             switchView.onTintColor = UIColor(red: 73.0/255.0, green: 134.0/255.0, blue: 231.0/255.0, alpha: 1.0)
             switchView.addTarget(self, action: "handleSwitchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
             cell.accessoryView = switchView
+            
         } else if filter.name == "Distance" || filter.name == "Sort By" {
             if filter.isExpanded {
                 let option = filter.options[indexPath.row]
@@ -107,13 +96,13 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
             
         }
-        
         return cell
     }
     
     func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
         let indexPath = tableView.indexPathForCell(switchCell)!
         switchStates[indexPath.row] = value
+        print(switchStates)
         print("filters view controller event!!")
     }
     
@@ -126,6 +115,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         titleForHeaderInSection section: Int) -> String? {
             return self.myFilters?.filters[section].name
     }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         print("in didSelectRowAtIndexPath")
         let filter = self.myFilters!.filters[indexPath.section] as Filter
@@ -139,7 +129,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
             
         }
-        
         
         if filter.isExpanded {
             if filter.name == "Distance" {
@@ -161,13 +150,11 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                     
                 }
             }
-            //filter.isExpanded = false
         }
         
     }
     
     func handleSwitchValueChanged(switchView: UISwitch) -> Void {
-        
         let cell = switchView.superview as! UITableViewCell
         if let indexPath = self.tableView.indexPathForCell(cell) {
             let filter = self.myFilters!.filters[indexPath.section] as Filter
