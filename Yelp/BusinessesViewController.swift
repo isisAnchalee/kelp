@@ -8,15 +8,23 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate{
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate, UISearchBarDelegate{
 
     var businesses: [Business] = []
-    
+    var filteredBusinesses: [Business]!
+
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSearch()
+
+        let searchBar = UISearchBar()
+        searchBar.sizeToFit()
+        searchBar.delegate = self
+        filteredBusinesses = businesses
+        navigationItem.titleView = searchBar
+
+        definesPresentationContext = true
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -25,12 +33,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         
         Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
-        
-            for business in businesses {
-                print(business.name!)
-                print(business.address!)
-            }
-            
+            self.filteredBusinesses = businesses
             self.tableView.reloadData()
         })
 
@@ -46,18 +49,21 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
 */
     }
     
-    internal func setupSearch(){
-        let searchBar = UISearchBar()
-        searchBar.sizeToFit()
-        navigationItem.titleView = searchBar
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String){
+        filteredBusinesses = searchText.isEmpty ? businesses : businesses.filter({(business: Business) -> Bool in
+            return business.name!.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+        })
+        
+        tableView.reloadData()
     }
+    
     internal func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        return businesses.count
+        return filteredBusinesses.count
     }
     
     internal func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
-        let business = businesses[indexPath.row]
+        let business = filteredBusinesses[indexPath.row]
         cell.business = business
         return cell
     }
@@ -70,10 +76,10 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         
-        let categories = filters["categories"] as? [String]
-
+        var categories = filters["categories"] as? [String]
         Business.searchWithTerm("restaurants", sort: nil, categories: categories, deals: nil) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
+            self.filteredBusinesses = businesses
             self.tableView.reloadData()
         }
     }

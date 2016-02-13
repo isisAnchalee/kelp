@@ -10,59 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Yelp/BusinessesViewController.swift"
-            timestampString = "477013513.532441"
+            timestampString = "477016826.871722"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Yelp.BusinessesViewController.viewDidLoad (Yelp.BusinessesViewController)() -&gt; ()"
-                  moduleName = "Yelp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/isisanchalee/Desktop/Codepath/ios_yelp_swift/Yelp/BusinessesViewController.swift"
-                  timestampString = "476935505.03945"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20"
-                  offsetFromSymbolStart = "75">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Yelp.BusinessesViewController.(viewDidLoad (Yelp.BusinessesViewController) -&gt; () -&gt; ()).(closure #1)"
-                  moduleName = "Yelp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/isisanchalee/Desktop/Codepath/ios_yelp_swift/Yelp/BusinessesViewController.swift"
-                  timestampString = "476935505.039627"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "21"
-                  endingLineNumber = "21"
-                  offsetFromSymbolStart = "32">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Yelp/BusinessesViewController.swift"
-            timestampString = "477013513.532441"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
             landmarkName = "viewDidLoad()"
             landmarkType = "5">
             <Locations>
