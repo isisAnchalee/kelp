@@ -23,11 +23,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func onSearchBtn(sender: AnyObject) {
+        print("HIIIIII!!")
         Filters.instance.copyFrom(self.myFilters!)
         self.delegate?.didUpdateFilters!(self)
-        
         dismissViewControllerAnimated(true, completion: nil)
-        
     }
     
     @IBAction func onCancelBtn(sender: AnyObject) {

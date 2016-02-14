@@ -36,17 +36,6 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             self.filteredBusinesses = businesses
             self.tableView.reloadData()
         })
-
-/* Example of Yelp search with more search options specified
-        Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
-            self.businesses = businesses
-            
-            for business in businesses {
-                print(business.name!)
-                print(business.address!)
-            }
-        }
-*/
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String){
@@ -76,19 +65,16 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     
     func didUpdateFilters(controller: FiltersViewController) {
-        if self.searchBar.text != "" {
-            print("didUpdateFilters called")
-            print("Distance is \(Filters.instance.distance)")
-            print("Deal is \(Filters.instance.deal)")
-            
-            Business.searchWithTerm("Restaurants", sort: .Distance, categories: Filters.instance.categories, deals: Filters.instance.deal) { (businesses: [Business]!, error: NSError!) -> Void in
-                self.businesses = businesses
-                
-                for business in businesses {
-                    print(business.name!)
-                    print(business.address!)
-                }
+        print("HIT ME")
+        
+        Business.searchWithTerm("Restaurants", sort: .Distance, categories: Filters.instance.categories, deals: Filters.instance.deal) { (businesses: [Business]!, error: NSError!) -> Void in
+            self.filteredBusinesses = businesses
+            for business in businesses {
+                print(business.name!)
+                print(business.address!)
             }
+            self.tableView.reloadData()
+
         }
         
     }
