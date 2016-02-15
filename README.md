@@ -46,7 +46,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='hhttps://media.giphy.com/media/l4KhYxpNna5ngKsvu/giphy.gif'>
+<img src='https://media.giphy.com/media/l4KhYxpNna5ngKsvu/giphy.gif'>
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
