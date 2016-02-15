@@ -13,6 +13,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var searchBar: UISearchBar!
     var businesses: [Business] = []
     var filteredBusinesses: [Business]!
+    var filters = Filters.sharedInstance
     var searchVar: String? = ""
 
     @IBOutlet weak var tableView: UITableView!
@@ -20,39 +21,23 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         filteredBusinesses = businesses
-
         searchBar.sizeToFit()
         searchBar.delegate = self
         navigationItem.titleView = searchBar
-
-        definesPresentationContext = true
-        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
-        Business.searchWithTerm(searchVar!, completion: { (businesses: [Business]!, error: NSError!) -> Void in
-            self.businesses = businesses
-            self.filteredBusinesses = businesses
-            self.tableView.reloadData()
-        })
+        performSearch()
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String){
         if !searchText.isEmpty{
-            search(searchText)
+            self.searchVar = searchText
+            performSearch()
+            tableView.reloadData()
         }
-        self.searchVar = searchText
-        tableView.reloadData()
-    }
-    
-    func search(query: String){
-        Business.searchWithTerm(query, completion: { (businesses: [Business]!, error: NSError!) -> Void in
-            self.businesses = businesses
-            self.filteredBusinesses = businesses
-            self.tableView.reloadData()
-        })
     }
     
     internal func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
@@ -72,20 +57,18 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         // Dispose of any resources that can be recreated.
     }
     
-    
-    func didUpdateFilters(controller: FiltersViewController) {
-        Business.searchWithTerm(searchVar!, sort: .Distance, categories: Filters.instance.categories, deals: Filters.instance.deal) { (businesses: [Business]!, error: NSError!) -> Void in
+    func performSearch(){
+        Business.searchWithTerm(searchVar!, sort: filters.sort, categories: filters.categories, deals: filters.deal) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             self.filteredBusinesses = businesses
-            for business in businesses {
-                print(business.name!)
-                print(business.address!)
-            }
             self.tableView.reloadData()
-
         }
-        
     }
+    
+    func didUpdateFilters(controller: FiltersViewController) {
+        performSearch()
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let navigationController = segue.destinationViewController as! UINavigationController
         let filtersViewController = navigationController.topViewController as! FiltersViewController

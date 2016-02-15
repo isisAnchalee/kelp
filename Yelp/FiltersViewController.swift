@@ -15,15 +15,11 @@ import UIKit
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     weak var delegate: FiltersViewControllerDelegate?
-    var categories: [[String:String]] = []
-    var switchStates: [Int:Bool] = [Int:Bool]()
     var myFilters:Filters?
-    var expanded = false
     
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func onSearchBtn(sender: AnyObject) {
-        Filters.instance.copyFrom(self.myFilters!)
         self.delegate?.didUpdateFilters!(self)
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -36,31 +32,24 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-    
-        //Instantiate the filters object to load filters
-        self.myFilters = Filters(instance: Filters.instance)
+        self.myFilters = Filters.sharedInstance
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     internal func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        print("in numberOfRowsInSection")
         let filter = self.myFilters!.filters[section] as Filter
         if filter.isExpanded {
-            print("Returning all opts - \(filter.options)")
-            //filter.isExpanded = false
             return filter.options.count
         } else {
             return filter.numOptsDisplayed!
         }
-        
     }
     
     internal func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "SwitchCell")
         let filter = self.myFilters!.filters[indexPath.section] as Filter
         let option = filter.options[indexPath.row]
         cell.textLabel!.text = option.optionName
@@ -97,12 +86,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         return cell
     }
     
-    func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
-        let indexPath = tableView.indexPathForCell(switchCell)!
-        switchStates[indexPath.row] = value
-        print(switchStates)
-    }
-    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return self.myFilters!.filters.count
     }
@@ -115,33 +98,35 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let filter = self.myFilters!.filters[indexPath.section] as Filter
-        
         if filter.name == "Distance" || filter.name == "Sort By" && !filter.isExpanded {
             filter.isExpanded = true
             // Sending the results back to main queue to update UI using the fetched data
             dispatch_async(dispatch_get_main_queue()) {
                 self.tableView.reloadSections(NSMutableIndexSet(index: indexPath.section), withRowAnimation: .Automatic)
             }
-            
         }
-        
         if filter.isExpanded {
             if filter.name == "Distance" {
                 let oldSelectedDistance = myFilters?.selectedDistanceIndex
                 if oldSelectedDistance != indexPath.row {
-                    let oldIndex = NSIndexPath(forRow: oldSelectedDistance!, inSection: indexPath.section)
                     myFilters?.selectedDistanceIndex = indexPath.row
                     let option = filter.options[indexPath.row]
+                    filter.options[oldSelectedDistance!].selected = false
                     option.selected = true
-                    self.tableView.reloadRowsAtIndexPaths([indexPath, oldIndex], withRowAnimation: .Automatic)
-                    
+                    filter.isExpanded = false
+                    tableView.reloadData()
+                    tableView.reloadSections(NSIndexSet(index: indexPath.section), withRowAnimation: .Automatic)
                 }
             } else if filter.name == "Sort By" {
                 let oldSelectedSort = myFilters?.selectedSortIndex
                 if oldSelectedSort != indexPath.row {
-                    let oldIndex = NSIndexPath(forRow: oldSelectedSort!, inSection: indexPath.section)
+                    let option = filter.options[indexPath.row]
                     myFilters?.selectedSortIndex = indexPath.row
-                    self.tableView.reloadRowsAtIndexPaths([indexPath, oldIndex], withRowAnimation: .Automatic)
+                    filter.options[oldSelectedSort!].selected = false
+                    option.selected = true
+                    filter.isExpanded = false
+                    tableView.reloadData()
+                    tableView.reloadSections(NSIndexSet(index: indexPath.section), withRowAnimation: .Automatic)
                     
                 }
             }
@@ -156,7 +141,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             let option = filter.options[indexPath.row]
             option.selected = switchView.on
         }
-        
     }
     
     

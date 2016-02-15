@@ -58,28 +58,21 @@ class Filters {
         )
     ]
     
-    init(instance: Filters? = nil) {
-        if instance != nil {
-            self.copyFrom(instance!)
-        }
-    }
-    
-    func copyFrom(instance: Filters) {
-        for var i = 0; i < self.filters.count; i++ {
-            for var j = 0; j < self.filters[i].options.count; j++ {
-                self.filters[i].options[j].selected = instance.filters[i].options[j].selected
-            }
-        }
-    }
-    
-    
-    class var instance: Filters {
+    class var sharedInstance: Filters {
+        var sharedInstance: Filter?
+        var token: dispatch_once_t?
+        
         struct Static {
-            static let instance: Filters = Filters()
+            static var sharedInstance: Filters?
+            static var token: dispatch_once_t = 0
         }
-        return Static.instance
+        
+        dispatch_once(&Static.token) {
+            Static.sharedInstance = Filters()
+        }
+        
+        return Static.sharedInstance!
     }
-    
     
     var categories: [String] {
         get {
@@ -126,6 +119,12 @@ class Filters {
                 }
             }
             return deal
+        }
+    }
+    
+    var sort:YelpSortMode {
+        get {
+            return YelpSortMode(rawValue: selectedSortIndex)!
         }
     }
     
