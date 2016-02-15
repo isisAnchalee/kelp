@@ -20,15 +20,15 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        filteredBusinesses = businesses
         searchBar.sizeToFit()
         searchBar.delegate = self
-        navigationItem.titleView = searchBar
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
-        
+        filteredBusinesses = businesses
+        navigationItem.titleView = searchBar
+
         performSearch()
     }
     
@@ -55,10 +55,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         return cell
     }
     
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func performSearch(){

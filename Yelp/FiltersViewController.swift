@@ -61,7 +61,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             switchView.onTintColor = UIColor(red: 73.0/255.0, green: 134.0/255.0, blue: 231.0/255.0, alpha: 1.0)
             switchView.addTarget(self, action: "handleSwitchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
             cell.accessoryView = switchView
-            
         } else if filter.name == "Distance" || filter.name == "Sort By" {
             if filter.isExpanded {
                 let option = filter.options[indexPath.row]
