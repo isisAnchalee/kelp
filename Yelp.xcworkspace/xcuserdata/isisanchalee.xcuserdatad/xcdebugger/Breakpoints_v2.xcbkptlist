@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Yelp/BusinessesViewController.swift"
-            timestampString = "477016826.871722"
+            timestampString = "477191316.678826"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
             landmarkName = "viewDidLoad()"
             landmarkType = "5">
             <Locations>
@@ -135,12 +135,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Yelp/FiltersViewController.swift"
-            timestampString = "477102602.563764"
+            timestampString = "477099673.22972"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "onSearchBtn(_:)"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "onCancelBtn(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -151,45 +151,61 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Yelp/BusinessesViewController.swift"
-            timestampString = "477102602.563764"
+            timestampString = "477191316.678826"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
-            landmarkName = "prepareForSegue(_:sender:)"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "searchBar(_:textDidChange:)"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Yelp.BusinessesViewController.didUpdateFilters (Yelp.BusinessesViewController)(Yelp.FiltersViewController) -&gt; ()"
+                  symbolName = "Yelp.BusinessesViewController.searchBar (Yelp.BusinessesViewController)(__ObjC.UISearchBar, textDidChange : Swift.String) -&gt; ()"
                   moduleName = "Yelp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/isisanchalee/Desktop/old-kelp/Yelp/BusinessesViewController.swift"
-                  timestampString = "477101185.254822"
+                  urlString = "file:///Users/isisanchalee/Desktop/kelp/Yelp/BusinessesViewController.swift"
+                  timestampString = "477191017.898027"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "76"
-                  endingLineNumber = "76"
-                  offsetFromSymbolStart = "400">
+                  startingLineNumber = "42"
+                  endingLineNumber = "42"
+                  offsetFromSymbolStart = "55">
                </Location>
                <Location
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Yelp.BusinessesViewController.(didUpdateFilters (Yelp.BusinessesViewController) -&gt; (Yelp.FiltersViewController) -&gt; ()).(closure #1)"
+                  symbolName = "Yelp.BusinessesViewController.(searchBar (Yelp.BusinessesViewController) -&gt; (__ObjC.UISearchBar, textDidChange : Swift.String) -&gt; ()).(closure #1)"
                   moduleName = "Yelp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/isisanchalee/Desktop/old-kelp/Yelp/BusinessesViewController.swift"
-                  timestampString = "477101185.254998"
+                  urlString = "file:///Users/isisanchalee/Desktop/kelp/Yelp/BusinessesViewController.swift"
+                  timestampString = "477191017.898279"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "76"
-                  endingLineNumber = "76"
-                  offsetFromSymbolStart = "1650">
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "48">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Yelp/BusinessesViewController.swift"
+            timestampString = "477191271.391335"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "didUpdateFilters(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

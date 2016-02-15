@@ -13,6 +13,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var searchBar: UISearchBar!
     var businesses: [Business] = []
     var filteredBusinesses: [Business]!
+    var searchVar: String? = ""
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -31,7 +32,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
-        Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm(searchVar!, completion: { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             self.filteredBusinesses = businesses
             self.tableView.reloadData()
@@ -39,11 +40,19 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String){
-        filteredBusinesses = searchText.isEmpty ? businesses : businesses.filter({(business: Business) -> Bool in
-            return business.name!.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
-        })
-        
+        if !searchText.isEmpty{
+            search(searchText)
+        }
+        self.searchVar = searchText
         tableView.reloadData()
+    }
+    
+    func search(query: String){
+        Business.searchWithTerm(query, completion: { (businesses: [Business]!, error: NSError!) -> Void in
+            self.businesses = businesses
+            self.filteredBusinesses = businesses
+            self.tableView.reloadData()
+        })
     }
     
     internal func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
@@ -65,7 +74,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     
     func didUpdateFilters(controller: FiltersViewController) {
-        Business.searchWithTerm("Restaurants", sort: .Distance, categories: Filters.instance.categories, deals: Filters.instance.deal) { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm(searchVar!, sort: .Distance, categories: Filters.instance.categories, deals: Filters.instance.deal) { (businesses: [Business]!, error: NSError!) -> Void in
+            self.businesses = businesses
             self.filteredBusinesses = businesses
             for business in businesses {
                 print(business.name!)
