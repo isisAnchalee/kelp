@@ -4,7 +4,7 @@
 
 Time spent: **20** hours spent in total
 
-**Note: While working on this project I experienced an extremely weird Xcode bug where my simulator was broken and refused to launch/synch with my code. It took in total about 7 hours to actually debug, which is why this homework assignment is so bare-bones. :(**
+**Note: While working on this project I experienced an extremely weird Xcode bug where my simulator was broken and refused to launch/synch with my code. It took a total of about 7 hours to debug, which is why the homework assignment is so bare-bones. :( Gomenasai**
 
 
 ## User Stories
@@ -39,6 +39,9 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
+- Creating drop-down views
+- Map view
+
 1.
 2.
 
@@ -46,7 +49,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://s23.postimg.org/5z6nef6zt/yelp1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
