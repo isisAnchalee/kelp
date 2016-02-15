@@ -131,7 +131,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
             }
         }
-        
     }
     
     func handleSwitchValueChanged(switchView: UISwitch) -> Void {

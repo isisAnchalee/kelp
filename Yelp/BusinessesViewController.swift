@@ -44,6 +44,10 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         return filteredBusinesses.count
     }
     
+    @IBAction func onTop(sender: AnyObject) {
+        self.searchBar.endEditing(true)
+    }
+    
     internal func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
         let business = filteredBusinesses[indexPath.row]
