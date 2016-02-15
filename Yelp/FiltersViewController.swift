@@ -23,7 +23,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func onSearchBtn(sender: AnyObject) {
-        print("HIIIIII!!")
         Filters.instance.copyFrom(self.myFilters!)
         self.delegate?.didUpdateFilters!(self)
         dismissViewControllerAnimated(true, completion: nil)
@@ -51,7 +50,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         print("in numberOfRowsInSection")
         let filter = self.myFilters!.filters[section] as Filter
         if filter.isExpanded {
-            print("Returning all opts - \(filter.options.count)")
+            print("Returning all opts - \(filter.options)")
             //filter.isExpanded = false
             return filter.options.count
         } else {
@@ -102,7 +101,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         let indexPath = tableView.indexPathForCell(switchCell)!
         switchStates[indexPath.row] = value
         print(switchStates)
-        print("filters view controller event!!")
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -116,10 +114,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print("in didSelectRowAtIndexPath")
         let filter = self.myFilters!.filters[indexPath.section] as Filter
         
-        print("Filter name -- \(filter.name)")
         if filter.name == "Distance" || filter.name == "Sort By" && !filter.isExpanded {
             filter.isExpanded = true
             // Sending the results back to main queue to update UI using the fetched data

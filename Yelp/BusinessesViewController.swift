@@ -65,8 +65,6 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     
     func didUpdateFilters(controller: FiltersViewController) {
-        print("HIT ME")
-        
         Business.searchWithTerm("Restaurants", sort: .Distance, categories: Filters.instance.categories, deals: Filters.instance.deal) { (businesses: [Business]!, error: NSError!) -> Void in
             self.filteredBusinesses = businesses
             for business in businesses {
